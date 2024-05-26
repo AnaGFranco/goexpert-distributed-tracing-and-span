@@ -117,31 +117,25 @@ func initTracer() {
 }
 
 func getWeather(ctx context.Context, location string) (float64, error) {
-	// Configure o client HTTP para usar a instrumentação OpenTelemetry
 	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 
-	// Substitua YOUR_API_KEY pela sua chave de API real
 	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=e5bd00e528e346ff8a840254213009&q&q=%s", location)
 
-	// Criação da requisição HTTP com o contexto adequado
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return 0, fmt.Errorf("error creating weather request: %v", err)
 	}
 
-	// Executando a requisição HTTP
 	resp, err := client.Do(req)
 	if err != nil {
 		return 0, fmt.Errorf("error executando a requisição de clima: %v", err)
 	}
 	defer resp.Body.Close()
 
-	// Verificação do código de status da resposta
 	if resp.StatusCode != http.StatusOK {
 		return 0, fmt.Errorf("failed to get weather, status code: %d", resp.StatusCode)
 	}
 
-	// Decodificação da resposta JSON
 	var result struct {
 		Current struct {
 			TempC float64 `json:"temp_c"`

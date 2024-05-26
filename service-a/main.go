@@ -93,7 +93,7 @@ func initTracer() {
 
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithBatcher(exporter),
-		sdktrace.WithResource(resource.NewWithAttributes(semconv.SchemaURL, semconv.ServiceNameKey.String("YOUR_SERVICE_NAME_HERE"))),
+		sdktrace.WithResource(resource.NewWithAttributes(semconv.SchemaURL, semconv.ServiceNameKey.String("goexpert-distributed-tracing-and-span"))),
 	)
 	otel.SetTracerProvider(tp)
 }
