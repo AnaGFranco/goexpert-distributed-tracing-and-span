@@ -1,4 +1,4 @@
-### Desafio Go: Sistema de Temperatura por CEP com OpenTelemetry e Zipkin
+### Desafio Go: Sistema de Temperatura por CEP com OpenTelemetry
 
 Este projeto consiste em dois serviços em Go:
 
