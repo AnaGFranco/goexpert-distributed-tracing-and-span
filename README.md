@@ -35,6 +35,6 @@ Este projeto consiste em dois serviços em Go:
    
 - Para o serviço B (substitua `CEP` por um código postal válido de 8 dígitos):
      ```
-     http://localhost:8081/weather?cep=CEP
+    curl -X GET "http://localhost:8081/weather?cep=29902555" -H "accept: application/json" 
      ```
 
