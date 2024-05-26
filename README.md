@@ -30,7 +30,7 @@ Este projeto consiste em dois serviços em Go:
 - Para o serviço A:
 
    ```
-   http://localhost:8080/cep
+   curl -X POST -H "Content-Type: application/json" -d '{"cep":"29902555"}' http://localhost:8080/cep
    ```
    
 - Para o serviço B (substitua `CEP` por um código postal válido de 8 dígitos):
