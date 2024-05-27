@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
@@ -67,7 +69,6 @@ func handleWeather(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
-// Utility functions remain unchanged as they are functioning correctly
 func getLocation(ctx context.Context, cep string) (string, error) {
 	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json/", cep)
@@ -103,15 +104,22 @@ func isNumeric(s string) bool {
 
 func initTracer() {
 	ctx := context.Background()
-	exporter, err := otlptracehttp.New(ctx, otlptracehttp.WithEndpoint("otel-collector:4317"), otlptracehttp.WithInsecure())
+	client := otlptracehttp.NewClient(
+		otlptracehttp.WithEndpoint("otel-collector:4317"),
+		otlptracehttp.WithInsecure(),
+	)
+	exporter, err := otlptrace.New(ctx, client)
 	if err != nil {
-		log.Fatalf("failed to initialize trace exporter: %v", err)
+		log.Fatalf("failed to create exporter: %v", err)
 	}
 
 	tp := sdktrace.NewTracerProvider(
 		sdktrace.WithSampler(sdktrace.AlwaysSample()),
 		sdktrace.WithBatcher(exporter),
-		sdktrace.WithResource(resource.NewWithAttributes(semconv.SchemaURL, semconv.ServiceNameKey.String("service-b"))),
+		sdktrace.WithResource(resource.NewWithAttributes(
+			semconv.SchemaURL,
+			semconv.ServiceNameKey.String("service-b"),
+		)),
 	)
 	otel.SetTracerProvider(tp)
 }
@@ -119,8 +127,9 @@ func initTracer() {
 func getWeather(ctx context.Context, location string) (float64, error) {
 	client := http.Client{Transport: otelhttp.NewTransport(http.DefaultTransport)}
 
-	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=e5bd00e528e346ff8a840254213009&q&q=%s", location)
+	escapedLocation := url.QueryEscape(location)
 
+	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=e5bd00e528e346ff8a840254213009&q&q=%s", escapedLocation)
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	if err != nil {
 		return 0, fmt.Errorf("error creating weather request: %v", err)
