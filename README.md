@@ -8,7 +8,7 @@ Este projeto consiste em dois serviços em Go:
 
 ### Instruções para Execução
 
-1. **Construir as Imagens**: Na raiz do projeto (onde está o arquivo `docker-compose.yml`), execute::
+1. **Construir as Imagens**: Na raiz do projeto, execute::
 
    ```
    docker-compose build
