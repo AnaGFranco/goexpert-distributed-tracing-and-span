@@ -8,14 +8,10 @@ Este projeto consiste em dois serviços em Go:
 
 ### Instruções para Execução
 
-1. **Construir as Imagens**: No terminal, navegue para cada diretório `service-a` e `service-b` e execute o comando:
+1. **Construir as Imagens**: Na raiz do projeto (onde está o arquivo `docker-compose.yml`), execute::
 
    ```
-   docker build -t service-a .
-   ```
-
-   ```
-   docker build -t service-b .
+   docker-compose build
    ```
 
 2. **Executar o Docker Compose**: Na raiz do projeto (onde está o arquivo `docker-compose.yml`), execute:
