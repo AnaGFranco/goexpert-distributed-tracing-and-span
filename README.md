@@ -34,3 +34,14 @@ Este projeto consiste em dois serviços em Go:
     curl -X GET "http://localhost:8081/weather?cep=29902555" -H "accept: application/json" 
      ```
 
+
+4. **Testar o zipkin**:
+
+- Abra o link no seu navegador:
+
+   ```
+   http://localhost:9411/zipkin/?lookback=15m&endTs=1716854339005&limit=10
+   ```
+<img width="1791" alt="image" src="https://github.com/AnaGFranco/goexpert-temperature-system/assets/55562874/c3756899-af33-4808-9d32-0718f60b5cbd">
+
+
